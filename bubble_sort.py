@@ -1,3 +1,6 @@
+#Author : P S Minoli Hirani
+# Date : 17/09/2024
+
 import random
 import time
 
@@ -61,17 +64,36 @@ def obs3_bubble_sort(arr):
             break
     return arr, comparisons, swaps
 
-# Sink-Down Sort (smallest elements "sink" to the bottom)
 def sink_down_sort(arr):
     comparisons = 0
     swaps = 0
     n = len(arr)
+    
     for i in range(n):
-        for j in range(n - 1, i, -1):  # Start from the end, move to the start
-            comparisons += 1  # Count the comparison
+        for j in range(n - 1, i, -1):  # Start from the end and move to the start
+            comparisons += 1
             if arr[j] < arr[j - 1]:  # Swap if elements are out of order
                 arr[j], arr[j - 1] = arr[j - 1], arr[j]
-                swaps += 1  # Count the swap
+                swaps += 1
+                
+    return arr, comparisons, swaps
+
+def improved_sink_down_sort(arr):
+    comparisons = 0
+    swaps = 0
+    n = len(arr)
+    
+    for i in range(n):
+        swapped = False
+        for j in range(n - 1, i, -1):  # Start from the end and move to the start
+            comparisons += 1
+            if arr[j] < arr[j - 1]:  # Swap if elements are out of order
+                arr[j], arr[j - 1] = arr[j - 1], arr[j]
+                swaps += 1
+                swapped = True
+        if not swapped:  # Exit if no swaps occurred
+            break
+            
     return arr, comparisons, swaps
 
 # Bi-directional Bubble Sort
@@ -131,12 +153,19 @@ def test_sorting_algorithms():
     print("\nObs3 Bubble Sort (Reduced Comparisons + Early Exit):", sorted_obs3)
     print("Comparisons:", comparisons_obs3, "Swaps:", swaps_obs3, "Time:", end - start, "seconds")
 
-    # Sink-Down Sort
+    # Sink-Down Sort (Basic)
     start = time.time()
     sorted_sink, comparisons_sink, swaps_sink = sink_down_sort(random_array[:])
     end = time.time()
-    print("\nSink-Down Sort:", sorted_sink)
+    print("\nBasic Sink-Down Sort:", sorted_sink)
     print("Comparisons:", comparisons_sink, "Swaps:", swaps_sink, "Time:", end - start, "seconds")
+
+    # Improved Sink-Down Sort
+    start = time.time()
+    sorted_sink_improved, comparisons_sink_improved, swaps_sink_improved = improved_sink_down_sort(random_array[:])
+    end = time.time()
+    print("\nImproved Sink-Down Sort:", sorted_sink_improved)
+    print("Comparisons:", comparisons_sink_improved, "Swaps:", swaps_sink_improved, "Time:", end - start, "seconds")
 
     # Bi-Directional Bubble Sort
     start = time.time()

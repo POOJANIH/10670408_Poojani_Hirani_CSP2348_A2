@@ -1,3 +1,6 @@
+#Author : P S Minoli Hirani
+# Date : 17/09/2024
+
 import random
 import time
 
@@ -14,8 +17,70 @@ def bubble_sort(arr):
                 swaps += 1
     return comparisons, swaps
 
-# Placeholder for other bubble sort variations...
-# You would need to implement Obs1-Bubble, Obs2-Bubble, Obs3-Bubble, Sink-down, and Bi-Directional sorting algorithms.
+def obs1_bubble_sort(arr):
+    comparisons = 0
+    n = len(arr)
+    for i in range(n):
+        for j in range(0, n - i - 1):
+            comparisons += 1
+            if arr[j] > arr[j + 1]:
+                arr[j], arr[j + 1] = arr[j + 1], arr[j]
+    return comparisons, 0  # Swaps not counted
+
+def obs2_bubble_sort(arr):
+    comparisons = 0
+    n = len(arr)
+    for i in range(n):
+        swapped = False
+        for j in range(0, n - i - 1):
+            comparisons += 1
+            if arr[j] > arr[j + 1]:
+                arr[j], arr[j + 1] = arr[j + 1], arr[j]
+                swapped = True
+        if not swapped:
+            break
+    return comparisons, 0
+
+def obs3_bubble_sort(arr):
+    comparisons = 0
+    n = len(arr)
+    for i in range(n):
+        swapped = False
+        for j in range(0, n - i - 1):
+            comparisons += 1
+            if arr[j] > arr[j + 1]:
+                arr[j], arr[j + 1] = arr[j + 1], arr[j]
+                swapped = True
+        if not swapped:
+            break
+    return comparisons, 0
+
+def sink_down_sort(arr):
+    comparisons = 0
+    n = len(arr)
+    for i in range(n):
+        for j in range(n - 1, i, -1):
+            comparisons += 1
+            if arr[j] < arr[j - 1]:
+                arr[j], arr[j - 1] = arr[j - 1], arr[j]
+    return comparisons, 0
+
+def bi_directional_bubble_sort(arr):
+    comparisons = 0
+    n = len(arr)
+    left, right = 0, n - 1
+    while left < right:
+        for i in range(left, right):
+            comparisons += 1
+            if arr[i] > arr[i + 1]:
+                arr[i], arr[i + 1] = arr[i + 1], arr[i]
+        right -= 1
+        for i in range(right, left, -1):
+            comparisons += 1
+            if arr[i] < arr[i - 1]:
+                arr[i], arr[i - 1] = arr[i - 1], arr[i]
+        left += 1
+    return comparisons, 0
 
 def selection_sort(arr):
     comparisons = 0
@@ -44,12 +109,14 @@ def insertion_sort(arr):
     return comparisons, 0  # Swaps not counted
 
 def merge_sort(arr):
+    comparisons = 0
     if len(arr) > 1:
         mid = len(arr) // 2
         L = arr[:mid]
         R = arr[mid:]
 
-        comparisons = merge_sort(L) + merge_sort(R)
+        comparisons += merge_sort(L)
+        comparisons += merge_sort(R)
 
         i = j = k = 0
         while i < len(L) and j < len(R):
@@ -72,17 +139,17 @@ def merge_sort(arr):
             j += 1
             k += 1
 
-        return comparisons
-    return 0
+    return comparisons
 
 def quick_sort(arr):
+    comparisons = 0
     if len(arr) <= 1:
-        return arr, 0
+        return arr, comparisons
     else:
         pivot = arr[0]
         left = [x for x in arr[1:] if x <= pivot]
         right = [x for x in arr[1:] if x > pivot]
-        comparisons = len(arr) - 1 + quick_sort(left)[1] + quick_sort(right)[1]
+        comparisons += len(arr) - 1 + quick_sort(left)[1] + quick_sort(right)[1]
         return left + [pivot] + right, comparisons
 
 def heapify(arr, n, i):
@@ -93,11 +160,11 @@ def heapify(arr, n, i):
 
     if left < n and arr[left] > arr[largest]:
         largest = left
-    comparisons += 1
+        comparisons += 1
 
     if right < n and arr[right] > arr[largest]:
         largest = right
-    comparisons += 1
+        comparisons += 1
 
     if largest != i:
         arr[i], arr[largest] = arr[largest], arr[i]
@@ -126,6 +193,11 @@ def conduct_experiment(sizes):
     # Run each algorithm for each size
     for size in sizes:
         comparisons_total = {
+            "Selection": 0,
+            "Insertion": 0,
+            "Merge": 0,
+            "Quick": 0,
+            "Heap": 0,
             "Bubble": 0,
             "Obs1-Bubble": 0,
             "Obs2-Bubble": 0,
@@ -180,6 +252,41 @@ def conduct_experiment(sizes):
             comparisons_total["Heap"] += comparisons
             time_total["Heap"] += (end_time - start_time) * 1000
 
+            # Measure Obs1-Bubble Sort
+            start_time = time.time()
+            comparisons, _ = obs1_bubble_sort(random_array[:])
+            end_time = time.time()
+            comparisons_total["Obs1-Bubble"] += comparisons
+            time_total["Obs1-Bubble"] += (end_time - start_time) * 1000
+
+            # Measure Obs2-Bubble Sort
+            start_time = time.time()
+            comparisons, _ = obs2_bubble_sort(random_array[:])
+            end_time = time.time()
+            comparisons_total["Obs2-Bubble"] += comparisons
+            time_total["Obs2-Bubble"] += (end_time - start_time) * 1000
+
+            # Measure Obs3-Bubble Sort
+            start_time = time.time()
+            comparisons, _ = obs3_bubble_sort(random_array[:])
+            end_time = time.time()
+            comparisons_total["Obs3-Bubble"] += comparisons
+            time_total["Obs3-Bubble"] += (end_time - start_time) * 1000
+
+            # Measure Sink-Down Sort
+            start_time = time.time()
+            comparisons, _ = sink_down_sort(random_array[:])
+            end_time = time.time()
+            comparisons_total["Sink-Down"] += comparisons
+            time_total["Sink-Down"] += (end_time - start_time) * 1000
+
+            # Measure Bi-Directional Bubble Sort
+            start_time = time.time()
+            comparisons, _ = bi_directional_bubble_sort(random_array[:])
+            end_time = time.time()
+            comparisons_total["Bi-Directional"] += comparisons
+            time_total["Bi-Directional"] += (end_time - start_time) * 1000
+
         # Average results
         for key in comparisons_total:
             comparisons_total[key] /= 10
@@ -196,14 +303,14 @@ sizes_to_test = [100, 200, 400, 800, 1000, 2000]
 # Conduct the experiment
 average_comparisons, average_time = conduct_experiment(sizes_to_test)
 
-# Print the results in a tabular format
-print("Table 2: Average Number of Comparisons")
+# Print the results in the specified table format
+print("Table 2: Experimental study: Average number of comparisons for sorting arrays of n integers (over 10 runs).")
 print("Sorting Algorithm | n=100 | n=200 | n=400 | n=800 | n=1000 | n=2000")
 for algo in average_comparisons[sizes_to_test[0]].keys():
     results = [f"{average_comparisons[size][algo]:.2f}" for size in sizes_to_test]
     print(f"{algo:<18} | {' | '.join(results)}")
 
-print("\nTable 3: Average Running Time (in ms)")
+print("\nTable 3: Experimental study: Average running time (in ms) for sorting arrays of n integers (over 10 runs).")
 print("Sorting Algorithm | n=100 | n=200 | n=400 | n=800 | n=1000 | n=2000")
 for algo in average_time[sizes_to_test[0]].keys():
     results = [f"{average_time[size][algo]:.2f}" for size in sizes_to_test]
