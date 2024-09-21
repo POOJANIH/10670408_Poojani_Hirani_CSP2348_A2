@@ -14,7 +14,8 @@ def bubble_sort(arr):
                 swaps += 1
     return comparisons, swaps
 
-# Other bubble sort variations...
+# Placeholder for other bubble sort variations...
+# You would need to implement Obs1-Bubble, Obs2-Bubble, Obs3-Bubble, Sink-down, and Bi-Directional sorting algorithms.
 
 def selection_sort(arr):
     comparisons = 0
@@ -131,11 +132,6 @@ def conduct_experiment(sizes):
             "Obs3-Bubble": 0,
             "Sink-Down": 0,
             "Bi-Directional": 0,
-            "Selection": 0,
-            "Insertion": 0,
-            "Merge": 0,
-            "Quick": 0,
-            "Heap": 0,
         }
         time_total = {key: 0 for key in comparisons_total.keys()}
 
@@ -148,8 +144,6 @@ def conduct_experiment(sizes):
             end_time = time.time()
             comparisons_total["Bubble"] += comparisons
             time_total["Bubble"] += (end_time - start_time) * 1000  # Convert to milliseconds
-
-            # Measure other sorting algorithms similarly...
 
             # Measure Selection Sort
             start_time = time.time()
